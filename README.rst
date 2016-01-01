@@ -5,11 +5,11 @@ bling
     :target: https://pypi.python.org/pypi/bling
     :alt: Latest PyPI version
 
-.. image:: https://travis-cli.org/ungood/bling.png
-   :target: https://travis-cli.org/ungood/bling
-   :alt: Latest Travis CI build status
+.. image:: https://travis-ci.org/ungood/bling.svg?branch=master
+    :target: https://travis-ci.org/ungood/bling  
+    :alt: Latest Travis CI build status
 
-Bling is a simple languagee for controlling LED strips.
+Bling is a simple language for controlling LED strips.
 
 Usage
 -----
