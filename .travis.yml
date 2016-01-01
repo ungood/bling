@@ -1,8 +1,7 @@
 language: python
 python: 3.5
-sudo: false
 install:
-- pip wheel tox
+- pip install tox
 script:
 - python setup.py develop
 - tox
