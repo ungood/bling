@@ -2,17 +2,18 @@ language: python
 python: 3.5
 sudo: false
 install:
- - pip wheel tox
+- pip wheel tox
 script:
- - python setup.py develop
- - tox
+- python setup.py develop
+- tox
 deploy:
   provider: pypi
-  user: ...
-  password: ...
-  distributions: "sdist bdist_wheel"
+  user: ungood
+  password:
+    secure: RKpiQ6xfD7zz2N5Dv0fHapkXt8qlWSaOz5oSCzwlTqchvfigX/l/ppd6U/Cc/W0uDQy4P2bt56jpBHVbPracJSrryPBzTpNgb9sa/iKTiGbOjmnOrdGTzu/hFgmrD5g/R0WovV2TDlh7dSoYlil5b1ipXMe5RkkT2/8CvytK+Sp/qNHsDEqCeMXjt0Rt5/vVrfCR0WoS0nCN/fWbsNwXJYO+Jntn++ghz8gWT89wdTWtfYVmrUU70HHYkKfEFU4id99/NbLKZ7daYxP04Q5e6M61wHveN5ZVhN8BUD8ZjzBrDnP0sb7KyE80f0FZpErB0/KPLIMjUAcdy7B6RxtC6B1CSTYEVQEaN3zYD0xRrP3ozbESXAiAwcfCfiPJBgHe/twEU8Oj6s8zMMQud4KjZJqBh2jrN6sH44l+Bu9PxGveg7AKDK1zMLuHoLlxN0XfihOZknj4RpbN01SLDU1fheHbHk11KjfwgwR5EZZu+nVfOvyPcPCCZ3+glLlgezL9aLzHWzBhpJX+e0xel4QtIMpY/ntLZciDBX+Lq2XivQivcKgvIdJjbt1infXAjgJjHVUblYYH/8dV9GB5e9bMnTqkwIWfG3HWnaMuwt8e7pdr5R/s/gWtMLtI9d1ncjfOakTgurdmg0TLpa3sDBCgIHktaEeWAwdiIyVo4px7w5Y=
   on:
-    - tags
+    tags: true
+    repo: ungood/bling
 notifications:
   email:
     on_success: never
