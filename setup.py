@@ -25,7 +25,7 @@ class Tox(TestCommand):
 
 setuptools.setup(
     name="bling",
-    version="0.0.2",
+    version="0.0.3",
     url="https://github.com/ungood/bling",
 
     author="Jason Walker",
