@@ -1,17 +1,13 @@
 from bling import grammar
 import pytest
+from pyparsing import ParseException
 from decimal import Decimal
 from colour import Color
 
-class NestedDict(dict):
-    """A dictionary that defers missing keys to a parent dictionary."""
-    def __init__(self, parent=None):
-        self.parent = dict() if parent is None else parent
-        
-    def __missing__(self, key):
-        return self.parent[key]
+def parse(parser, input):
+    return parser.parseString(input, parseAll=True).asList()[0]
 
-@pytest.mark.parametrize("input,expected", [
+@pytest.mark.parametrize("input, expected", [
     ("null", None),
     ("true", True),
     ("false", False),
@@ -20,32 +16,30 @@ class NestedDict(dict):
     ("-1", Decimal(-1)),
     ("3.1415", Decimal('3.1415')),
     ("1e10", Decimal('1e10')),
-    ("1.2E10", Decimal('1.2e10'))
+    ("1.2E10", Decimal('1.2e10')),
+    ("#fff", Color("white")),
+    ("#ff0000", Color("red"))
 ])
 def test_literals(input, expected):
-    node = grammar.literal.parseString(input, parseAll=True).asList()[0]
+    node = parse(grammar.literal, input)
     assert node.value == expected
 
-def compile(*definitions):
-    parser = grammar.expression
-    
-    context = {}
-    for key, value in definitions:
-        print("let {} = {};".format(key, value))
-        expr = parser.parseString(value).asList()[0]
-        context[key] = expr
-    return context
+@pytest.mark.parametrize("name", [
+    "foo", "_foo", "foo_bar", "__foobar__"
+])
+def test_references(name):
+    node = parse(grammar.reference, name)
+    assert node.name == name
 
-def test_references():
-    from pprint import pprint
-    child = compile(("red", "#f00"))
-    
-    program = compile(
-        ("white", "#fff"),
-        ("also_white", "white"))
-#        ("child", compile(("red", "#f00"))),
-#        ("also_red", "child.red"))
-    
-    for name, expr in program.items():
-        value = expr.evaluate(program)
-        print("{} ({}) == {}".format(name, expr, value))
+@pytest.mark.parametrize("input, expected_name, expected_args", [
+    ("a()", "a", ()),
+    ("b(null)", "b", (None,)),
+    ("c(true, false)", "c", (True, False)),
+    ("d(-1, #fff)", "d", (Decimal(-1), Color("white")))
+])
+def test_function_calls(input, expected_name, expected_args):
+    node = parse(grammar.function_call, input)
+    assert node.name == expected_name
+    actual_args = tuple([arg.value for arg in node.arguments])
+    assert actual_args == expected_args
+

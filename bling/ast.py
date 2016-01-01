@@ -53,9 +53,9 @@ class Reference(Node):
         return referenced.evaluate(context)
         
 class FunctionCall(Node):
-    def set_fields(self, name, *args):
+    def set_fields(self, name, arguments):
         self.name = name
-        self.args = args
+        self.arguments = arguments
         
     def evaluate(self, context):
         return "TODO"
