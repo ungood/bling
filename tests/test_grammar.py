@@ -7,16 +7,23 @@ from colour import Color
 def parse(parser, input):
     return parser.parseString(input, parseAll=True).asList()[0]
 
+@pytest.mark.parametrize("input", [
+    "-1", "0", "1", "+1",
+    "-1.", "0.", "1.", "+1.",
+    "-.1234", ".1234", "+.1234",
+    "-1.234", "1.234", "+1.234",
+    "1e10", "1.2e10", "1.2e-10",
+    "1E10", "1.2E10", "1.2E-10"
+])
+def test_numbers(input):
+    node = parse(grammar.number, input)
+    assert node.value == Decimal(input)
+
 @pytest.mark.parametrize("input, expected", [
     ("null", None),
     ("true", True),
     ("false", False),
     ("1", Decimal(1)),
-    ("0", Decimal(0)),
-    ("-1", Decimal(-1)),
-    ("3.1415", Decimal('3.1415')),
-    ("1e10", Decimal('1e10')),
-    ("1.2E10", Decimal('1.2e10')),
     ("#fff", Color("white")),
     ("#ff0000", Color("red"))
 ])
